@@ -18,10 +18,13 @@ public class Schedule {
     private String contents;
     private String createdTime;
     private String modifiedTime;
+    private Long userid;
+    private String email;
 
     public Schedule(ScheduleRequestDto requestDto) {
         this.contents = requestDto.getContents();
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
+        this.email = requestDto.getEmail();
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,23 +22,40 @@ public class ScheduleRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Transactional
     public Schedule save(Schedule schedule) {
+
+        String userSql = "INSERT INTO user(username, email, createdTime, modifiedTime) VALUES (?, ?, default, default)";
 
         //DB 저장
         //기본 키를 반환받기 위한 객체
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String sql = "INSERT INTO schedule (username, password, contents, createdTime, modifiedTime) VALUES (?, ?, ? ,default, default)";
+        jdbcTemplate.update( con -> {
+                    PreparedStatement preparedStatement = con.prepareStatement(userSql,
+                            new String[]{"userid"});
+                    preparedStatement.setString(1, schedule.getUsername());
+                    preparedStatement.setString(2, schedule.getEmail());
+                    return preparedStatement;
+                },
+                keyHolder);
+
+        Long userId = keyHolder.getKey().longValue();
+
+        String scheduleSql = "INSERT INTO schedule (username, password, contents, createdTime, modifiedTime, userid) VALUES (?, ?, ? ,default, default, ?)";
+
 
         jdbcTemplate.update( con -> {
-                    PreparedStatement preparedStatement = con.prepareStatement(sql,
+                    PreparedStatement preparedStatement = con.prepareStatement(scheduleSql,
                             Statement.RETURN_GENERATED_KEYS);
                     preparedStatement.setString(1, schedule.getUsername());
                     preparedStatement.setString(2, schedule.getPassword());
                     preparedStatement.setString(3, schedule.getContents());
+                    preparedStatement.setLong(4, userId);
                     return preparedStatement;
                 },
                 keyHolder);
+
 
         // DB Insert 후 받아온 기본키 확인
         Long id = keyHolder.getKey().longValue();
@@ -60,7 +78,8 @@ public class ScheduleRepository {
                 String contents = rs.getString("contents");
                 String createdTime = rs.getString("createdTime");
                 String modifiedTime = rs.getString("modifiedTime");
-                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime);
+                Long userid = rs.getLong("userid");
+                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime, userid);
             }
         });
     }
@@ -79,7 +98,8 @@ public class ScheduleRepository {
                 String contents = rs.getString("contents");
                 String createdTime = rs.getString("createdTime");
                 String modifiedTime = rs.getString("modifiedTime");
-                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime);
+                Long userid = rs.getLong("userid");
+                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime, userid);
             }
         });
     }
@@ -98,7 +118,8 @@ public class ScheduleRepository {
                 String contents = rs.getString("contents");
                 String createdTime = rs.getString("createdTime");
                 String modifiedTime = rs.getString("modifiedTime");
-                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime);
+                Long userid = rs.getLong("userid");
+                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime, userid);
             }
         });
     }
@@ -118,7 +139,8 @@ public class ScheduleRepository {
                 String contents = rs.getString("contents");
                 String createdTime = rs.getString("createdTime");
                 String modifiedTime = rs.getString("modifiedTime");
-                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime);
+                Long userid = rs.getLong("userid");
+                return new ScheduleResponseDto(id, username, password, contents, createdTime, modifiedTime, userid);
             }
         }, id);
     }

@@ -12,6 +12,7 @@ public class ScheduleResponseDto {
     private String contents;
     private String createdTime;
     private String modifiedTime;
+    private Long userid;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
@@ -20,14 +21,16 @@ public class ScheduleResponseDto {
         this.contents = schedule.getContents();
         this.createdTime = schedule.getCreatedTime();
         this.modifiedTime = schedule.getModifiedTime();
+        this.userid = schedule.getUserid();
     }
 
-    public ScheduleResponseDto(Long id, String username, String password, String contents, String createdTime, String modifiedTime) {
+    public ScheduleResponseDto(Long id, String username, String password, String contents, String createdTime, String modifiedTime, Long userid) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.contents = contents;
         this.createdTime = createdTime;
         this.modifiedTime = modifiedTime;
+        this.userid = userid;
     }
 }

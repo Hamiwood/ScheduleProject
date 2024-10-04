@@ -6,14 +6,6 @@ import com.sparta.scheduleproject.entity.Paging;
 import com.sparta.scheduleproject.entity.Schedule;
 import com.sparta.scheduleproject.repository.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class ScheduleService {

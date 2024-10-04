@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 //일정 데이터를 저장할 Schedule 클래스
 @Getter
 @Setter

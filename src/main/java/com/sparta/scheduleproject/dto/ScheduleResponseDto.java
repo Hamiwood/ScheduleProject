@@ -33,4 +33,8 @@ public class ScheduleResponseDto {
         this.modifiedTime = modifiedTime;
         this.userid = userid;
     }
+
+    public ScheduleResponseDto(Long userid) {
+        this.userid = userid;
+    }
 }

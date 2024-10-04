@@ -184,9 +184,18 @@ public class ScheduleRepository {
         }, id);
     }
 
+    @Transactional
     public Long update(Long id, ScheduleRequestDto requestDto) {
-        String sql = "UPDATE schedule SET username = ?, contents = ?, modifiedTime = default WHERE id = ?";
-        jdbcTemplate.update(sql, requestDto.getUsername(), requestDto.getContents(), id);
+
+        //해당 id 값에 맞는 userid를 가져옴
+        String userSql = "SELECT userid FROM schedule WHERE id = ?";
+        Long userId = jdbcTemplate.queryForObject(userSql, new Object[]{id}, Long.class);
+
+        String sqlSchedule = "UPDATE schedule SET username = ?, contents = ?, modifiedTime = default WHERE id = ?";
+        jdbcTemplate.update(sqlSchedule, requestDto.getUsername(), requestDto.getContents(), id);
+
+        String sqlUser = "UPDATE user SET modifiedTime = default WHERE userid = ?";
+        jdbcTemplate.update(sqlUser, userId);
         return id;
     }
 

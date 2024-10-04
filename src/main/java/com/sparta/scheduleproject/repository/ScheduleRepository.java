@@ -2,6 +2,7 @@ package com.sparta.scheduleproject.repository;
 
 import com.sparta.scheduleproject.dto.ScheduleRequestDto;
 import com.sparta.scheduleproject.dto.ScheduleResponseDto;
+import com.sparta.scheduleproject.entity.Paging;
 import com.sparta.scheduleproject.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -44,7 +45,6 @@ public class ScheduleRepository {
 
         String scheduleSql = "INSERT INTO schedule (username, password, contents, createdTime, modifiedTime, userid) VALUES (?, ?, ? ,default, default, ?)";
 
-
         jdbcTemplate.update( con -> {
                     PreparedStatement preparedStatement = con.prepareStatement(scheduleSql,
                             Statement.RETURN_GENERATED_KEYS);
@@ -64,11 +64,24 @@ public class ScheduleRepository {
         return schedule;
     }
 
-    public List<ScheduleResponseDto> findAll() {
-        // DB 조회
-        String sql = "SELECT * FROM schedule ORDER BY ModifiedTime DESC, username ASC";
+    public List<ScheduleResponseDto> findAll(Paging paging) {
 
-        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+        // 데이터의 총 개수 조회
+        String countSql = "SELECT COUNT(*) FROM schedule";
+        int totalRecords = jdbcTemplate.queryForObject(countSql, Integer.class);
+
+        // 총 데이터 개수를 기반으로 Paging 객체 생성
+        paging = new Paging(paging.getPage(), paging.getPageSize(), totalRecords);
+
+        // 범위를 넘어선 페이지인 경우 빈 배열 반환
+        if (paging.getPage() > paging.getTotalPages()) {
+            return List.of();
+        }
+
+        // DB 조회
+        String sql = "SELECT * FROM schedule ORDER BY ModifiedTime DESC, username ASC LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(sql, new Object[]{paging.getPageSize(), paging.getOffset()}, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드
@@ -84,11 +97,24 @@ public class ScheduleRepository {
         });
     }
 
-    public List<ScheduleResponseDto> findAllOrderByDate() {
-        // DB 조회
-        String sql = "SELECT * FROM schedule ORDER BY ModifiedTime DESC";
+    public List<ScheduleResponseDto> findAllOrderByDate(Paging paging) {
 
-        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+        // 데이터의 총 개수 조회
+        String countSql = "SELECT COUNT(*) FROM schedule";
+        int totalRecords = jdbcTemplate.queryForObject(countSql, Integer.class);
+
+        // 총 데이터 개수를 기반으로 Paging 객체 생성
+        paging = new Paging(paging.getPage(), paging.getPageSize(), totalRecords);
+
+        // 범위를 넘어선 페이지인 경우 빈 배열 반환
+        if (paging.getPage() > paging.getTotalPages()) {
+            return List.of();
+        }
+
+        // DB 조회
+        String sql = "SELECT * FROM schedule ORDER BY ModifiedTime DESC LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(sql, new Object[]{paging.getPageSize(), paging.getOffset()}, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드
@@ -104,11 +130,24 @@ public class ScheduleRepository {
         });
     }
 
-    public List<ScheduleResponseDto> findAllOrderByUsername() {
-        // DB 조회
-        String sql = "SELECT * FROM schedule ORDER BY username ASC";
+    public List<ScheduleResponseDto> findAllOrderByUsername(Paging paging) {
 
-        return jdbcTemplate.query(sql, new RowMapper<ScheduleResponseDto>() {
+        // 데이터의 총 개수 조회
+        String countSql = "SELECT COUNT(*) FROM schedule";
+        int totalRecords = jdbcTemplate.queryForObject(countSql, Integer.class);
+
+        // 총 데이터 개수를 기반으로 Paging 객체 생성
+        paging = new Paging(paging.getPage(), paging.getPageSize(), totalRecords);
+
+        // 범위를 넘어선 페이지인 경우 빈 배열 반환
+        if (paging.getPage() > paging.getTotalPages()) {
+            return List.of();
+        }
+
+        // DB 조회
+        String sql = "SELECT * FROM schedule ORDER BY username ASC LIMIT ? OFFSET ?";
+
+        return jdbcTemplate.query(sql, new Object[]{paging.getPageSize(), paging.getOffset()}, new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 // SQL 의 결과로 받아온 데이터들을 ScheduleResponseDto 타입으로 변환해줄 메서드

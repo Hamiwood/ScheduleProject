@@ -25,24 +25,25 @@ public class ScheduleController {
     }
 
     // 다건조회 >> 수정일, username 둘다 적용
-    @GetMapping("/schedules")
-    public List<ScheduleResponseDto> getScheduleAll() {
+    @GetMapping("/schedules/{page}/{pageSize}")
+
+    public List<ScheduleResponseDto> getScheduleAll(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.getScheduleAll();
+        return scheduleService.getScheduleAll(page, pageSize);
     }
 
     //다건 조회 >> 수정일로 정렬
-    @GetMapping("/schedules/modifiedTime")
-    public List<ScheduleResponseDto> getScheduleAllOrderByDate() {
+    @GetMapping("/schedules/modifiedTime/{page}/{pageSize}")
+    public List<ScheduleResponseDto> getScheduleAllOrderByDate(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.getScheduleOrderByDate();
+        return scheduleService.getScheduleOrderByDate(page, pageSize);
     }
 
     //다건 조회 >> username으로 정렬
-    @GetMapping("/schedules/username")
-    public List<ScheduleResponseDto> getScheduleAllOrderByUsername() {
+    @GetMapping("/schedules/username/{page}/{pageSize}")
+    public List<ScheduleResponseDto> getScheduleAllOrderByUsername(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
-        return scheduleService.getScheduleOrderByUsername();
+        return scheduleService.getScheduleOrderByUsername(page, pageSize);
     }
 
     //단건 조회

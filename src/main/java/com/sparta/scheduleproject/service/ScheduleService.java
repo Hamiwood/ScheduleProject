@@ -2,6 +2,7 @@ package com.sparta.scheduleproject.service;
 
 import com.sparta.scheduleproject.dto.ScheduleRequestDto;
 import com.sparta.scheduleproject.dto.ScheduleResponseDto;
+import com.sparta.scheduleproject.entity.Paging;
 import com.sparta.scheduleproject.entity.Schedule;
 import com.sparta.scheduleproject.repository.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,22 +37,25 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getScheduleAll() {
+    public List<ScheduleResponseDto> getScheduleAll(int page , int pageSize) {
+        Paging paging = new Paging(page, pageSize, 0);
         //DB 조회
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        return scheduleRepository.findAll();
+        return scheduleRepository.findAll(paging);
     }
 
-    public List<ScheduleResponseDto> getScheduleOrderByDate() {
+    public List<ScheduleResponseDto> getScheduleOrderByDate(int page , int pageSize) {
+        Paging paging = new Paging(page, pageSize, 0);
         //DB조회
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        return scheduleRepository.findAllOrderByDate();
+        return scheduleRepository.findAllOrderByDate(paging);
     }
 
-    public List<ScheduleResponseDto> getScheduleOrderByUsername() {
+    public List<ScheduleResponseDto> getScheduleOrderByUsername(int page , int pageSize) {
+        Paging paging = new Paging(page, pageSize, 0);
         //DB조회
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
-        return scheduleRepository.findAllOrderByUsername();
+        return scheduleRepository.findAllOrderByUsername(paging);
     }
 
     public ScheduleResponseDto getSchedule(Long id) {

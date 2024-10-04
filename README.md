@@ -1,7 +1,7 @@
 # ScheduleProject
 
 ### API 설계
-![Screenshot 2024-10-04 at 12 18 30](https://github.com/user-attachments/assets/2c809d7a-517b-4384-a49b-4ac4cc138225)
+![Screenshot 2024-10-04 at 14 14 38](https://github.com/user-attachments/assets/a908d29f-6e14-46bd-9b9a-b7c5a25175ef)
 ### ERD 설계
 ![Screenshot 2024-10-04 at 12 01 21](https://github.com/user-attachments/assets/2a24241b-37cf-404b-b09b-3ca0f7fc56ee)
 

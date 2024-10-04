@@ -23,6 +23,7 @@ public class ScheduleRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    //생성
     @Transactional
     public Schedule save(Schedule schedule) {
 
@@ -64,6 +65,7 @@ public class ScheduleRepository {
         return schedule;
     }
 
+    //다건 조회 >> username, modifiedTime으로 정렬
     public List<ScheduleResponseDto> findAll(Paging paging) {
 
         // 데이터의 총 개수 조회
@@ -97,6 +99,7 @@ public class ScheduleRepository {
         });
     }
 
+    //다건 조회 >> modifiedTime으로 정렬
     public List<ScheduleResponseDto> findAllOrderByDate(Paging paging) {
 
         // 데이터의 총 개수 조회
@@ -130,6 +133,7 @@ public class ScheduleRepository {
         });
     }
 
+    //다건 조회 >> username으로 정렬
     public List<ScheduleResponseDto> findAllOrderByUsername(Paging paging) {
 
         // 데이터의 총 개수 조회
@@ -163,9 +167,9 @@ public class ScheduleRepository {
         });
     }
 
+    //단건조회
     public ScheduleResponseDto findOne(Long id) {
 
-        // schedule 내용 수정
         String sql = "SELECT * FROM schedule where id = ?";
 
         return jdbcTemplate.queryForObject(sql, new RowMapper<ScheduleResponseDto>() {
@@ -184,12 +188,13 @@ public class ScheduleRepository {
         }, id);
     }
 
+    //수정
     @Transactional
     public Long update(Long id, ScheduleRequestDto requestDto) {
 
         //해당 id 값에 맞는 userid를 가져옴
-        String userSql = "SELECT userid FROM schedule WHERE id = ?";
-        Long userId = jdbcTemplate.queryForObject(userSql, new Object[]{id}, Long.class);
+        String selectUserid = "SELECT userid FROM schedule WHERE id = ?";
+        Long userId = jdbcTemplate.queryForObject(selectUserid, new Object[]{id}, Long.class);
 
         String sqlSchedule = "UPDATE schedule SET username = ?, contents = ?, modifiedTime = default WHERE id = ?";
         jdbcTemplate.update(sqlSchedule, requestDto.getUsername(), requestDto.getContents(), id);
@@ -199,9 +204,19 @@ public class ScheduleRepository {
         return id;
     }
 
+    //삭제
+    @Transactional
     public Long delete(Long id){
+
+        //해당 id 값에 맞는 userid를 가져옴
+        String selectUserid = "SELECT userid FROM schedule WHERE id = ?";
+        Long userId = jdbcTemplate.queryForObject(selectUserid, new Object[]{id}, Long.class);
+
         String sql = "DELETE FROM schedule WHERE id = ?";
         jdbcTemplate.update(sql, id);
+
+        String sqlUser = "DELETE FROM user WHERE userid = ?";
+        jdbcTemplate.update(sqlUser, userId);
         return id;
     }
 

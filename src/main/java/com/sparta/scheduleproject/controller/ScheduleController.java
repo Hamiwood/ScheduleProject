@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     private final JdbcTemplate jdbcTemplate;
@@ -18,14 +18,14 @@ public class ScheduleController {
     }
 
     //Create
-    @PostMapping("/schedules")
+    @PostMapping("")
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.createSchedule(requestDto);
     }
 
     // 다건조회 >> 수정일, username 둘다 적용
-    @GetMapping("/schedules/{page}/{pageSize}")
+    @GetMapping("/{page}/{pageSize}")
 
     public List<ScheduleResponseDto> getScheduleAll(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
@@ -33,35 +33,35 @@ public class ScheduleController {
     }
 
     //다건 조회 >> 수정일로 정렬
-    @GetMapping("/schedules/modifiedTime/{page}/{pageSize}")
+    @GetMapping("/modifiedTime/{page}/{pageSize}")
     public List<ScheduleResponseDto> getScheduleAllOrderByDate(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.getScheduleOrderByDate(page, pageSize);
     }
 
     //다건 조회 >> username으로 정렬
-    @GetMapping("/schedules/username/{page}/{pageSize}")
+    @GetMapping("/username/{page}/{pageSize}")
     public List<ScheduleResponseDto> getScheduleAllOrderByUsername(@PathVariable int page, @PathVariable int pageSize) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.getScheduleOrderByUsername(page, pageSize);
     }
 
     //단건 조회
-    @GetMapping("/schedules/{id}")
+    @GetMapping("/{id}")
     public ScheduleResponseDto getSchedule(@PathVariable Long id){
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.getSchedule(id);
     }
 
     //update
-    @PutMapping("/schedules/{id}/{password}")
+    @PutMapping("/{id}/{password}")
     public Long updateSchedule(@PathVariable Long id, @PathVariable String password, @RequestBody ScheduleRequestDto requestDto) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.updateSchedule(id, password, requestDto);
     }
 
     //delete
-    @DeleteMapping("/schedules/{id}/{password}")
+    @DeleteMapping("/{id}/{password}")
     public Long deleteSchedule(@PathVariable Long id, @PathVariable String password) {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.deleteSchedule(id,password);
